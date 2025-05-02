@@ -9,12 +9,10 @@ from config import BOT_TOKEN, DEBUG
 from dispatcher import bot, dp
 from modules.admin.handlers.admin import admin_rt
 from modules.device_control.handlers.control_devices import devices_rt
-from services.database.engine import init_db, async_session
-from services.database.requests import Devices
+from services.database.engine import init_db
 
 
 # from tests.db_tests import start_test
-
 
 
 def start_logging():
@@ -31,14 +29,15 @@ def start_logging():
         encoding='utf-8'
     )
 
+
 def setup_routers():
     dp.include_router(admin_rt)
     dp.include_router(devices_rt)
 
+
 def setup_timezone():
     pytz.timezone("Asia/Tashkent")
     datetime.utcnow().replace(tzinfo=pytz.utc)
-
 
 
 async def main():
