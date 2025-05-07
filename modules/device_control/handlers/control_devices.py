@@ -25,28 +25,28 @@ async def start_h(msg: Message):
 
 @devices_rt.callback_query(F.data.startswith('my-devices'))
 async def control_panel(call: CallbackQuery):
-    active_devices = await FastConnection(url='https://shiot-production.up.railway.app/devices/active').request()
-
-    keyboard = await devicesControlKeyboard.active_devices_kb(active_devices=)
-    text = 'Активные устройства: ' if keyboard else 'Активных устройств не найдено'
     count = 0
     while count < 30:
-        await asyncio.sleep(1)
+        active_devices = await FastConnection(url='https://shiot-production.up.railway.app/devices/active').request()
+        devices_ids = active_devices['active_devices']
+        keyboard = await devicesControlKeyboard.active_devices_kb(active_devices=devices_ids)
+        text = 'Активные устройства: ' if keyboard else 'Активных устройств не найдено'
+
+        await asyncio.sleep(3)
         await call.bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
                                          text=f"{text}\n{30 - count}",
                                          reply_markup=keyboard)
-        count += 1
+        count += 3
     await call.message.delete()
 
 
 @devices_rt.callback_query(F.data.startswith('devices-'))
 async def select_device_h(call: CallbackQuery):
     device_type, device_id = (filter_data(call.data, 'devices-')).split(',')
-    await call.bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
-                                     text=f'Управление устройством: {device_type}',
-                                     reply_markup=await devicesControlKeyboard.manage_device_kb(device_id=device_id,
-                                                                                                device_type=device_type,
-                                                                                                status=True))
+    await call.message.answer(text=f'Управление устройством: {device_type}',
+                              reply_markup=await devicesControlKeyboard.manage_device_kb(device_id=device_id,
+                                                                                         device_type=device_type,
+                                                                                         status=True))
 
 
 @devices_rt.callback_query(F.data.startswith('control-device,'))

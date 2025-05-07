@@ -43,7 +43,7 @@ def setup_timezone():
 async def main():
     setup_routers()
     # await start_test()
-    await init_db()
+    # await init_db()
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 
