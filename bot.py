@@ -7,12 +7,9 @@ import pytz
 
 from config import BOT_TOKEN, DEBUG
 from dispatcher import bot, dp
-from modules.admin.handlers.admin import admin_rt
-from modules.device_control.handlers.control_devices import devices_rt
-from services.database.engine import init_db
+from modules.admin.handler import admin_rt
+from modules.device_control.control_handler import devices_rt
 
-
-# from tests.db_tests import start_test
 
 
 def start_logging():
@@ -37,19 +34,17 @@ def setup_routers():
 
 def setup_timezone():
     pytz.timezone("Asia/Tashkent")
-    datetime.utcnow().replace(tzinfo=pytz.utc)
+    datetime.now().replace(tzinfo=pytz.utc)
 
 
 async def main():
     setup_routers()
-    # await start_test()
     # await init_db()
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 
 if __name__ == '__main__':
     start_logging()
-
     try:
         asyncio.run(main())
     except KeyboardInterrupt:

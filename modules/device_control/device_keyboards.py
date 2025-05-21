@@ -11,20 +11,19 @@ class devicesControlKeyboard:
         return keyboard
 
     @staticmethod
-    async def active_devices_kb(active_devices):
-        if len(active_devices) < 1:
-            print('Устройства не подключены!')
-        socket_state = 1 if len(active_devices) > 0 else 0
-        btn_socket1 = InlineKeyboardButton(text='Розетка🟢', callback_data='devices-socket,1')
-        btn_socket0 = InlineKeyboardButton(text='Розетка⚫', callback_data='pass')
-        btn1 = btn_socket1 if socket_state == 1 else btn_socket0
-        btn2 = InlineKeyboardButton(text='Водонагреватель', callback_data='devices-water_heater,2')
-        btn3 = InlineKeyboardButton(text='Вентиляция', callback_data='devices-ventilation,3')
-        active_btn_list = []
-        for device_id in active_devices:
-            btn = InlineKeyboardButton(text=f'Устройство: {device_id}', callback_data=f'device,id={device_id}')
-            active_btn_list.append(btn)
-        keyboard = InlineKeyboardMarkup(inline_keyboard=[[btn1], active_btn_list])
+    async def devices_kb(dlist: list):
+        if len(dlist) < 1:
+            print('Пусто!')
+            return None
+        btn_list = []
+        for device in dlist:
+            name = device['name']
+            pk = device['id']
+            status = '🟢' if True else '⚫'
+            btn = InlineKeyboardButton(text=f"{name}:{status}", callback_data=f'devices-{name},{pk}')
+            btn_list.append(btn)
+        inline_keyboard = [btn_list[i:i + 2] for i in range(0, len(btn_list), 2)]
+        keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
         return keyboard
 
     @staticmethod

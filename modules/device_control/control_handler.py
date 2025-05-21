@@ -1,14 +1,12 @@
 import asyncio
-import json
 
 from aiogram import Router, F
-from aiogram.filters import Command, StateFilter
+from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
-from modules.admin.keyboards import devicesControlKeyboard
+from modules.device_control.device_keyboards import devicesControlKeyboard
 from modules.device_control.control_time import handle_time_input, time_kb
-from modules.device_control.states import SocketControlStates
 from utils.helpers import filter_data, FastConnection
 
 devices_rt = Router(name='devices')
@@ -27,10 +25,9 @@ async def start_h(msg: Message):
 async def control_panel(call: CallbackQuery):
     count = 0
     while count < 30:
-        active_devices = await FastConnection(url='https://shiot-production.up.railway.app/devices/active').request()
-        devices_ids = active_devices['active_devices']
-        keyboard = await devicesControlKeyboard.active_devices_kb(active_devices=devices_ids)
-        text = 'Активные устройства: ' if keyboard else 'Активных устройств не найдено'
+        devices = await FastConnection(url=f'{url}/devices/all').request()
+        keyboard = await devicesControlKeyboard.devices_kb(dlist=devices)
+        text = 'Все устройства: ' if keyboard else 'Устройств не найдено'
 
         await asyncio.sleep(3)
         await call.bot.edit_message_text(chat_id=call.from_user.id, message_id=call.message.message_id,
