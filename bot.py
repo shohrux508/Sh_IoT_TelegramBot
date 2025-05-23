@@ -5,10 +5,10 @@ from datetime import datetime
 
 import pytz
 
+from admin.handler import admin_rt
 from config import BOT_TOKEN, DEBUG
+from devices.router import devices_rt
 from dispatcher import bot, dp
-from modules.admin.handler import admin_rt
-from modules.device_control.control_handler import devices_rt
 
 
 

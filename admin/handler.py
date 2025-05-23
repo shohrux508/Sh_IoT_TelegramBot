@@ -1,8 +1,8 @@
-from aiogram import Router, F
+from aiogram import Router
 from aiogram.filters import Command
-from aiogram.types import Message, CallbackQuery, BufferedInputFile
+from aiogram.types import Message
 
-from modules.admin.middlewares import AdminOnlyMiddleware
+from admin.middlewares import AdminOnlyMiddleware
 
 
 admin_rt = Router(name='admin')

@@ -7,16 +7,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DEBUG = bool(int(os.getenv('DEBUG', 0)))
-DATABASE_URL = os.getenv('DATABASE_URL')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 ADMIN_ID = list(map(int, os.getenv('ADMIN_ID').split(',')))
-
-# Broker settings
-HOST = os.getenv('MQQT_BROKER')
-PORT = int(os.getenv('MQTT_PORT'))
-USERNAME = os.getenv('MQTT_USERNAME')
-PASSWORD = os.getenv('MQTT_PASSWORD')
-SSL_CONTEXT = ssl.create_default_context()
+LOCAL_HOST = os.getenv('LOCAL_HOST')
+PUB_HOST = os.getenv('PUB_HOST')
+host = os.getenv('host')
+if int(host) == 2:
+    url = PUB_HOST
+else:
+    url = LOCAL_HOST
 
 if not BOT_TOKEN:
     logging.error("BOT_TOKEN is not defined neither in .env file nor in environment variables")
